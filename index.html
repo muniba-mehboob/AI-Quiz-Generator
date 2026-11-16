@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TA Assistant Studio | Interactive Quiz & Scenario Evaluator</title>
+  <title>AI Assessment Studio | Universal Quiz & Scenario Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -22,352 +22,49 @@
       --badge-green-text: #047857;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-page);
-      color: var(--text-main);
-      line-height: 1.6;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .nav-container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0.9rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      text-decoration: none;
-      color: var(--text-main);
-    }
-
-    .brand-logo {
-      width: 40px;
-      height: 40px;
-      background-color: var(--primary);
-      color: #ffffff;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1.15rem;
-    }
-
-    .brand-text h1 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .brand-text span {
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 600;
-      display: block;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 4rem;
-    }
-
-    .hero-card {
-      background: linear-gradient(135deg, #ffffff 0%, #f4f2ff 100%);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 2.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
-    }
-
-    .hero-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--accent-bg);
-      color: var(--primary);
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 0.35rem 0.85rem;
-      border-radius: 999px;
-      margin-bottom: 1rem;
-    }
-
-    .hero-title {
-      font-size: 2.25rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
-      color: #0f172a;
-    }
-
-    .hero-title span {
-      color: var(--primary);
-    }
-
-    .hero-subtitle {
-      font-size: 0.98rem;
-      color: var(--text-muted);
-      margin-bottom: 1.75rem;
-    }
-
-    .presets-box {
-      margin-bottom: 1.5rem;
-    }
-
-    .presets-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    .preset-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .preset-chip {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.4rem 0.85rem;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .preset-chip:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: var(--accent-bg);
-    }
-
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.88rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text-main);
-    }
-
-    .form-textarea {
-      width: 100%;
-      min-height: 130px;
-      padding: 0.85rem;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 0.92rem;
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-textarea:focus {
-      border-color: var(--primary);
-    }
-
-    .controls-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .form-select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      background: #ffffff;
-      outline: none;
-    }
-
-    .btn-generate {
-      width: 100%;
-      background: var(--primary);
-      color: #ffffff;
-      border: none;
-      padding: 0.9rem;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: background 0.2s;
-    }
-
-    .btn-generate:hover {
-      background: var(--primary-light);
-    }
-
-    /* Output Section */
-    .output-section {
-      display: none;
-      margin-top: 2rem;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.75rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);
-    }
-
-    .quiz-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .question-box {
-      margin-bottom: 1.5rem;
-      padding-bottom: 1.25rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .question-box:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .q-text {
-      font-weight: 600;
-      font-size: 0.98rem;
-      margin-bottom: 0.75rem;
-      color: var(--text-main);
-    }
-
-    .options-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .option-label {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.65rem 0.85rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 0.88rem;
-      cursor: pointer;
-      background: #fafafa;
-      transition: all 0.2s;
-    }
-
-    .option-label:hover {
-      background: var(--accent-bg);
-      border-color: #cbd5e1;
-    }
-
-    .explanation-box {
-      margin-top: 0.75rem;
-      padding: 0.75rem;
-      background: #f8fafc;
-      border-left: 3px solid var(--primary);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      display: none;
-    }
-
-    .btn-submit-quiz {
-      background: var(--badge-green-text);
-      color: #ffffff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-
-    .score-display {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--badge-green-text);
-      margin-top: 1rem;
-    }
-
-    /* Spinner */
-    .spinner-wrap {
-      display: none;
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid var(--border-color);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 1rem;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem 0;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      border-top: 1px solid var(--border-color);
-      margin-top: 3rem;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--bg-page); color: var(--text-main); line-height: 1.6; }
+    header { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
+    .nav-container { max-width: 1120px; margin: 0 auto; padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: var::text-main; }
+    .brand-logo { width: 40px; height: 40px; background-color: var(--primary); color: #ffffff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.15rem; }
+    .brand-text h1 { font-size: 1.05rem; font-weight: 700; line-height: 1.2; color: var(--text-main); }
+    .brand-text span { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; display: block; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    .hero-card { background: linear-gradient(135deg, #ffffff 0%, #f4f2ff 100%); border: 1px solid var(--border-color); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03); }
+    .hero-pill { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-bg); color: var(--primary); font-size: 0.78rem; font-weight: 600; padding: 0.35rem 0.85rem; border-radius: 999px; margin-bottom: 1rem; }
+    .hero-title { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.75rem; color: #0f172a; }
+    .hero-title span { color: var(--primary); }
+    .hero-subtitle { font-size: 0.98rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+    .presets-box { margin-bottom: 1.5rem; }
+    .presets-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
+    .preset-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .preset-chip { background: #ffffff; border: 1px solid var(--border-color); color: var(--text-main); padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .preset-chip:hover { border-color: var(--primary); color: var(--primary); background: var(--accent-bg); }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+    .form-textarea { width: 100%; min-height: 130px; padding: 0.85rem; border: 1px solid var(--border-color); border-radius: 12px; font-family: inherit; font-size: 0.92rem; resize: vertical; outline: none; transition: border-color 0.2s; }
+    .form-textarea:focus { border-color: var(--primary); }
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .form-select { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 10px; font-family: inherit; font-size: 0.9rem; background: #ffffff; outline: none; }
+    .btn-generate { width: 100%; background: var(--primary); color: #ffffff; border: none; padding: 0.9rem; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s; }
+    .btn-generate:hover { background: var(--primary-light); }
+    .output-section { display: none; margin-top: 2rem; }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02); }
+    .quiz-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+    .question-box { margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); }
+    .question-box:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .q-text { font-weight: 600; font-size: 0.98rem; margin-bottom: 0.75rem; color: var(--text-main); }
+    .options-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .option-label { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.88rem; cursor: pointer; background: #fafafa; transition: all 0.2s; }
+    .option-label:hover { background: var(--accent-bg); border-color: #cbd5e1; }
+    .explanation-box { margin-top: 0.75rem; padding: 0.75rem; background: #f8fafc; border-left: 3px solid var(--primary); font-size: 0.85rem; color: var(--text-muted); display: none; }
+    .btn-submit-quiz { background: var(--badge-green-text); color: #ffffff; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 1rem; }
+    .score-display { font-weight: 700; font-size: 1.1rem; color: var(--badge-green-text); margin-top: 1rem; }
+    .spinner-wrap { display: none; text-align: center; padding: 2rem; }
+    .spinner { width: 40px; height: 40px; border: 4px solid var(--border-color); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    footer { text-align: center; padding: 2rem 0; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border-color); margin-top: 3rem; }
   </style>
 </head>
 <body>
@@ -375,10 +72,10 @@
   <header>
     <div class="nav-container">
       <a href="#" class="brand">
-        <div class="brand-logo">TA</div>
+        <div class="brand-logo">AI</div>
         <div class="brand-text">
-          <h1>TA Assistant Studio</h1>
-          <span>Interactive Quiz &amp; Scenario Evaluator</span>
+          <h1>Assessment Studio</h1>
+          <span>Universal AI Quiz &amp; Scenario Generator</span>
         </div>
       </a>
     </div>
@@ -386,61 +83,59 @@
 
   <main class="container">
     <div class="hero-card">
-      <div class="hero-pill">
-        ✨ FAST-NUCES Teaching Assistant Inspired Workflow
-      </div>
-      <h2 class="hero-title">Turn Lecture Notes or CS Topics into <span>Exam-Ready Assessments</span></h2>
+      <div class="hero-pill">✨ Powered by n8n Webhook &amp; Gemini AI</div>
+      <h2 class="hero-title">Turn Any Subject or Notes into <span>Custom Assessments</span></h2>
       <p class="hero-subtitle">
-        Paste your lecture notes or pick a core Computer Science preset below. The Smart AI TA engine instantly generates structured multiple-choice questions with detailed concept explanations plus practical design scenarios.
+        Enter any topic across computer science, business, science, or general knowledge. The AI engine instantly builds tailored multiple-choice questions and practical challenge scenarios.
       </p>
 
       <div class="presets-box">
-        <span class="presets-label">Quick CS Module Presets (Click to Autofill)</span>
+        <span class="presets-label">Explore Multi-Domain Presets (Click to Autofill)</span>
         <div class="preset-chips">
-          <button class="preset-chip" onclick="loadPreset('Object-Oriented Programming (OOP) & Encapsulation')">🎓 Object-Oriented Programming</button>
-          <button class="preset-chip" onclick="loadPreset('Database Normalization & MySQL Indexing')">🗄️ Database Normalization</button>
-          <button class="preset-chip" onclick="loadPreset('Software Design Patterns & UML Diagrams')">📐 Software Design &amp; UML</button>
-          <button class="preset-chip" onclick="loadPreset('n8n Workflow Automation & REST APIs')">⚡ n8n Webhooks &amp; APIs</button>
+          <button class="preset-chip" onclick="loadPreset('Artificial Intelligence & Machine Learning Ethics')">🤖 AI &amp; Machine Learning</button>
+          <button class="preset-chip" onclick="loadPreset('Digital Marketing & Growth Funnels')">📈 Digital Marketing</button>
+          <button class="preset-chip" onclick="loadPreset('Financial Operations & Risk Management')">💰 Financial Operations</button>
+          <button class="preset-chip" onclick="loadPreset('World History & Geopolitical Shifts')">🌍 World History</button>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="topicInput">Course Topic or Module Title *</label>
-        <textarea id="topicInput" class="form-textarea" placeholder="Enter topic title or paste lecture summary here..."></textarea>
+        <label class="form-label" for="topicInput">Enter Any Topic, Subject, or Paste Notes *</label>
+        <textarea id="topicInput" class="form-textarea" placeholder="Type any subject, question, or paste text content here..."></textarea>
       </div>
 
       <div class="controls-grid">
         <div>
           <label class="form-label" for="questionCount">Number of Questions</label>
           <select id="questionCount" class="form-select">
-            <option value="3">3 MCQs (Quick Check)</option>
-            <option value="5" selected>5 MCQs (Standard Quiz)</option>
+            <option value="3">3 MCQs</option>
+            <option value="5" selected>5 MCQs</option>
+            <option value="10">10 MCQs</option>
           </select>
         </div>
         <div>
           <label class="form-label" for="difficulty">Difficulty Level</label>
           <select id="difficulty" class="form-select">
-            <option value="Intermediate" selected>Intermediate (BS Level)</option>
-            <option value="Advanced">Advanced (Exam Grade)</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate" selected>Intermediate</option>
+            <option value="Advanced">Advanced / Expert</option>
           </select>
         </div>
       </div>
 
       <button class="btn-generate" onclick="generateAssessment()">
-        ⚡ Generate Instant Assessment
+        ⚡ Generate Live AI Assessment via n8n
       </button>
     </div>
 
     <!-- Loading Spinner -->
     <div class="spinner-wrap" id="spinnerWrap">
       <div class="spinner"></div>
-      <p style="font-weight: 600; color: var(--primary);">Synthesizing lecture notes &amp; framing academic evaluation rubric...</p>
+      <p style="font-weight: 600; color: var(--primary);">Triggering n8n workflow &amp; synthesizing AI assessment...</p>
     </div>
 
     <!-- Output Container -->
     <div class="output-section" id="outputSection">
-      
-      <!-- MCQ Quiz Card -->
       <div class="card">
         <div class="quiz-title">📝 Generated Multiple Choice Questions</div>
         <div id="mcqContainer"></div>
@@ -448,145 +143,130 @@
         <div id="scoreResult"></div>
       </div>
 
-      <!-- Practical Scenario Evaluation Card -->
       <div class="card">
-        <div class="quiz-title">📐 Practical Design Scenario &amp; Rubric</div>
+        <div class="quiz-title">📐 Practical Challenge Scenario &amp; Rubric</div>
         <div id="scenarioContainer"></div>
       </div>
-
     </div>
   </main>
 
   <footer>
-    <p>© 2026 Muniba Mehboob • TA Assistant Studio &amp; Assessment Engine</p>
+    <p>© 2026 Muniba Mehboob • Universal Assessment Engine</p>
   </footer>
 
   <script>
+    let currentQuizData = null;
+
     function loadPreset(topicText) {
       document.getElementById('topicInput').value = topicText;
     }
 
-    function generateAssessment() {
+    async function generateAssessment() {
       const topic = document.getElementById('topicInput').value.trim();
+      const count = document.getElementById('questionCount').value;
+      const difficulty = document.getElementById('difficulty').value;
+
       if (!topic) {
-        alert('Please enter or select a course topic first!');
+        alert('Please enter or select a topic first!');
         return;
       }
 
-      // Hide output, show spinner
       document.getElementById('outputSection').style.display = 'none';
       document.getElementById('spinnerWrap').style.display = 'block';
 
-      setTimeout(() => {
+      try {
+        const response = await fetch('https://muniba-mehboob.app.n8n.cloud/webhook/generate-quiz', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ topic, count, difficulty })
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch from n8n webhook');
+
+        const data = await response.json();
+        currentQuizData = data;
+        renderDynamicAssessment(data);
+
         document.getElementById('spinnerWrap').style.display = 'none';
-        renderAssessment(topic);
         document.getElementById('outputSection').style.display = 'block';
         document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
-      }, 1000);
+
+      } catch (error) {
+        document.getElementById('spinnerWrap').style.display = 'none';
+        alert('Webhook connection error. Please ensure your n8n workflow is active.');
+        console.error(error);
+      }
     }
 
-    function renderAssessment(topic) {
-      // Dynamic tailored content based on topic selection
+    function renderDynamicAssessment(data) {
       const mcqContainer = document.getElementById('mcqContainer');
       const scenarioContainer = document.getElementById('scenarioContainer');
 
-      let questions = [
-        {
-          q: `Which of the following best defines the core principle of ${topic} in professional software engineering?`,
-          options: [
-            "A) Hardcoding all business logic directly into the database triggers",
-            "B) Modular separation of concerns ensuring high maintainability and code reusability",
-            "C) Eliminating all documentation and relying solely on verbal handoffs",
-            "D) Disabling access controls for faster execution speed"
-          ],
-          correct: 1,
-          exp: "Correct! Modular separation of concerns is fundamental to clean architecture and robust application development."
-        },
-        {
-          q: `What is the primary operational advantage when implementing structured standards for ${topic}?`,
-          options: [
-            "A) Increased system bottlenecks and slower debugging cycles",
-            "B) Enhanced reliability, auditability, and predictable error handling",
-            "C) Complete removal of unit testing requirements",
-            "D) Eliminating the need for version control systems"
-          ],
-          correct: 1,
-          exp: "Correct! Structured design ensures predictable error handling and high system reliability during live operations."
-        },
-        {
-          q: `In the context of evaluating student solutions or live production logs regarding ${topic}, what metric is most critical?`,
-          options: [
-            "A) Execution correctness and edge-case resilience",
-            "B) File name length and color theme selection",
-            "C) Number of lines of commented-out code",
-            "D) Frequency of manual reboots"
-          ],
-          correct: 0,
-          exp: "Correct! Execution correctness and robust edge-case handling form the backbone of both academic grading rubrics and fintech operational checks."
-        }
-      ];
-
       let mcqHTML = '';
-      questions.forEach((item, idx) => {
-        mcqHTML += `
-          <div class="question-box" id="qBox-${idx}">
-            <div class="q-text">Q${idx+1}. ${item.q}</div>
-            <div class="options-list">
-        `;
-        item.options.forEach((opt, optIdx) => {
+      if (data.questions && Array.isArray(data.questions)) {
+        data.questions.forEach((item, idx) => {
           mcqHTML += `
-            <label class="option-label">
-              <input type="radio" name="question_${idx}" value="${optIdx}" />
-              <span>${opt}</span>
-            </label>
+            <div class="question-box" id="qBox-${idx}">
+              <div class="q-text">Q${idx+1}. ${item.q}</div>
+              <div class="options-list">
+          `;
+          item.options.forEach((opt, optIdx) => {
+            mcqHTML += `
+              <label class="option-label">
+                <input type="radio" name="question_${idx}" value="${optIdx}" />
+                <span>${opt}</span>
+              </label>
+            `;
+          });
+          mcqHTML += `
+              </div>
+              <div class="explanation-box" id="exp-${idx}">💡 <strong>Expert Feedback:</strong> ${item.exp}</div>
+            </div>
           `;
         });
-        mcqHTML += `
-            </div>
-            <div class="explanation-box" id="exp-${idx}">💡 <strong>TA Feedback:</strong> ${item.exp}</div>
-          </div>
-        `;
-      });
+      }
       mcqContainer.innerHTML = mcqHTML;
 
-      scenarioContainer.innerHTML = `
-        <p style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">Scenario Assignment:</p>
-        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
-          Design an enterprise workflow solution addressing potential edge-case failures in <strong>${topic}</strong>. Your architecture must handle concurrency, provide clear transaction audit logs, and maintain clean separation of concerns.
-        </p>
-        <p style="font-weight: 600; margin-bottom: 0.3rem; color: var(--text-main);">Grading Rubric Breakdown:</p>
-        <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem;">
-          <li><strong>Architecture &amp; Design (40%):</strong> Clean structural diagram or modular breakdown.</li>
-          <li><strong>Error Handling &amp; Security (30%):</strong> Graceful degradation and secure state verification.</li>
-          <li><strong>Documentation &amp; Clarity (30%):</strong> Comprehensive explanation of design decisions.</li>
-        </ul>
-      `;
+      if (data.scenario) {
+        let rubricHTML = '';
+        if (data.scenario.rubric && Array.isArray(data.scenario.rubric)) {
+          data.scenario.rubric.forEach(r => {
+            rubricHTML += `<li>${r}</li>`;
+          });
+        }
+
+        scenarioContainer.innerHTML = `
+          <p style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">Challenge Task:</p>
+          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1lem;">${data.scenario.task}</p>
+          <p style="font-weight: 600; margin-bottom: 0.3rem; color: var(--text-main);">Evaluation Rubric Breakdown:</p>
+          <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem;">
+            ${rubricHTML}
+          </ul>
+        `;
+      }
     }
 
     function evaluateQuiz() {
-      let score = 0;
-      const total = 3;
-      const correctAnswers = [1, 1, 0];
+      if (!currentQuizData || !currentQuizData.questions) return;
 
-      for (let i = 0; i < total; i++) {
+      let score = 0;
+      const total = currentQuizData.questions.length;
+
+      currentQuizData.questions.forEach((item, i) => {
         const selected = document.querySelector(`input[name="question_${i}"]:checked`);
         const expBox = document.getElementById(`exp-${i}`);
-        expBox.style.display = 'block';
+        if (expBox) expBox.style.display = 'block';
 
-        if (selected && parseInt(selected.value) === correctAnswers[i]) {
+        if (selected && parseInt(selected.value) === item.correct) {
           score++;
         }
-      }
+      });
 
       const scoreResult = document.getElementById('scoreResult');
-      scoreResult.innerHTML = `<div class="score-display">🎉 Assessment Evaluated! Your Score: ${score} / ${total} Correct. Excellent analytical performance!</div>`;
+      scoreResult.innerHTML = `<div class="score-display">🎉 Assessment Evaluated! Your Score: ${score} / ${total} Correct. Great analytical work!</div>`;
 
       if (score === total) {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       }
     }
   </script>
