@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Assessment Studio | Universal Quiz & Scenario Evaluator</title>
+  <title>AI Assessment Studio | by Muniba Mehboob</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -29,9 +29,10 @@
     header { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
     .nav-container { max-width: 1120px; margin: 0 auto; padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
     .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: var(--text-main); }
-    .brand-logo { width: 40px; height: 40px; background-color: var(--primary); color: #ffffff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.15rem; }
-    .brand-text h1 { font-size: 1.05rem; font-weight: 700; line-height: 1.2; color: var(--text-main); }
-    .brand-text span { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; display: block; }
+    .brand-logo { width: 42px; height: 42px; background-color: var(--primary); color: #ffffff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.15rem; flex-shrink: 0; }
+    .brand-text h1 { font-size: 1.08rem; font-weight: 700; line-height: 1.25; color: var(--text-main); }
+    .brand-text span { font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; display: block; margin-top: 2px; }
+    .brand-text .author-tag { color: var(--primary); font-weight: 700; }
     .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
     .hero-card { background: linear-gradient(135deg, #ffffff 0%, #f4f2ff 100%); border: 1px solid var(--border-color); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03); }
     .hero-pill { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-bg); color: var(--primary); font-size: 0.78rem; font-weight: 600; padding: 0.35rem 0.85rem; border-radius: 999px; margin-bottom: 1rem; }
@@ -56,6 +57,10 @@
 
     .btn-generate { width: 100%; background: var(--primary); color: #ffffff; border: none; padding: 0.9rem; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s; }
     .btn-generate:hover { background: var(--primary-light); }
+    .btn-generate:disabled { opacity: 0.65; cursor: not-allowed; }
+    
+    .error-banner { display: none; background-color: var(--badge-red-bg); border: 1px solid var(--badge-red-text); color: var(--badge-red-text); padding: 1rem 1.25rem; border-radius: 12px; margin-top: 1.25rem; font-size: 0.9rem; font-weight: 500; }
+
     .output-section { display: none; margin-top: 2rem; }
     .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02); }
     .quiz-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
@@ -95,7 +100,7 @@
         <div class="brand-logo">AI</div>
         <div class="brand-text">
           <h1>Assessment Studio</h1>
-          <span>Universal AI Quiz &amp; Scenario Evaluator</span>
+          <span>Universal AI Quiz &amp; Scenario Evaluator • <span class="author-tag">by Muniba Mehboob</span></span>
         </div>
       </a>
     </div>
@@ -149,9 +154,11 @@
         </div>
       </div>
 
-      <button class="btn-generate" onclick="generateAssessment()">
+      <button class="btn-generate" id="btnGenerate" onclick="generateAssessment()">
         ⚡ Generate Live AI Assessment via n8n
       </button>
+
+      <div class="error-banner" id="errorBanner"></div>
     </div>
 
     <!-- Loading Spinner -->
@@ -177,7 +184,7 @@
   </main>
 
   <footer>
-    <p>© 2026 Muniba Mehboob • Universal Assessment Engine</p>
+    <p>© 2026 Muniba Mehboob • Universal AI Quiz &amp; Scenario Evaluator</p>
   </footer>
 
   <script>
@@ -186,6 +193,19 @@
 
     function loadPreset(topicText) {
       document.getElementById('topicInput').value = topicText;
+      hideError();
+    }
+
+    function showError(msg) {
+      const banner = document.getElementById('errorBanner');
+      banner.innerHTML = `⚠️ <strong>Request Issue:</strong> ${msg}`;
+      banner.style.display = 'block';
+    }
+
+    function hideError() {
+      const banner = document.getElementById('errorBanner');
+      banner.style.display = 'none';
+      banner.innerHTML = '';
     }
 
     async function generateAssessment() {
@@ -194,8 +214,10 @@
       const scenarioCount = parseInt(document.getElementById('scenarioCount').value);
       const difficulty = document.getElementById('difficulty').value;
 
+      hideError();
+
       if (!topic) {
-        alert('Please enter or select a topic first!');
+        showError('Please enter or select a topic first!');
         return;
       }
 
@@ -206,6 +228,8 @@
         document.getElementById('questionCount').value = 100;
       }
 
+      const genBtn = document.getElementById('btnGenerate');
+      genBtn.disabled = true;
       document.getElementById('outputSection').style.display = 'none';
       document.getElementById('spinnerWrap').style.display = 'block';
 
@@ -222,9 +246,15 @@
           })
         });
 
-        if (!response.ok) throw new Error('Failed to fetch from n8n webhook');
+        if (!response.ok) {
+          throw new Error(`Server responded with status ${response.status}. Google Gemini AI may be experiencing temporary high demand (503). Please wait a few seconds and try again.`);
+        }
 
         const data = await response.json();
+        if (!data || (!data.questions && !data.scenarios && !data.scenario)) {
+          throw new Error('Received an incomplete response from the AI service. Please try generating again.');
+        }
+
         currentQuizData = data;
         renderDynamicAssessment(data);
 
@@ -234,8 +264,10 @@
 
       } catch (error) {
         document.getElementById('spinnerWrap').style.display = 'none';
-        alert('Webhook connection error. Please ensure your n8n workflow is active.');
+        showError(error.message || 'Could not connect to the AI service due to high server demand or network interruption. Please try again in a moment.');
         console.error(error);
+      } finally {
+        genBtn.disabled = false;
       }
     }
 
@@ -243,10 +275,12 @@
       const mcqContainer = document.getElementById('mcqContainer');
       const scenarioContainer = document.getElementById('scenarioContainer');
       const scenarioCard = document.getElementById('scenarioCard');
+      const mcqCard = document.getElementById('mcqCard');
 
       // Render MCQs
       let mcqHTML = '';
-      if (data.questions && Array.isArray(data.questions)) {
+      if (data.questions && Array.isArray(data.questions) && data.questions.length > 0) {
+        mcqCard.style.display = 'block';
         data.questions.forEach((item, idx) => {
           mcqHTML += `
             <div class="question-box" id="qBox-${idx}">
@@ -270,11 +304,13 @@
             </div>
           `;
         });
+      } else {
+        mcqCard.style.display = 'none';
       }
       mcqContainer.innerHTML = mcqHTML;
       document.getElementById('scoreResult').innerHTML = '';
 
-      // Handle backward compatibility (single 'scenario' object or 'scenarios' array)
+      // Handle 'scenarios' array or single 'scenario' object
       let scenariosList = [];
       if (data.scenarios && Array.isArray(data.scenarios)) {
         scenariosList = data.scenarios;
@@ -350,12 +386,16 @@
           })
         });
 
-        if (!response.ok) throw new Error('Evaluation request failed');
+        if (!response.ok) {
+          throw new Error(`Grading service returned status ${response.status}. Google Gemini may be temporarily busy (503). Please try clicking Evaluate again in a few seconds.`);
+        }
 
         const evalData = await response.json();
-        const scoreVal = evalData.score !== undefined ? evalData.score : 'Evaluated';
+        const scoreVal = (evalData.score !== undefined && evalData.score !== null && !isNaN(evalData.score)) ? evalData.score : 'N/A';
         const feedbackText = evalData.feedback || 'Response evaluated based on the provided rubric.';
 
+        resultBox.style.background = 'var(--accent-bg)';
+        resultBox.style.borderColor = '#d8d4f8';
         resultBox.innerHTML = `
           <div style="font-weight: 700; font-size: 1rem; color: var(--primary); margin-bottom: 0.4rem;">
             📊 AI Rubric Score: <span style="color: var(--badge-green-text);">${scoreVal} / 100</span>
@@ -367,7 +407,14 @@
         resultBox.style.display = 'block';
 
       } catch (err) {
-        alert('Could not evaluate scenario right now. Check n8n workflow connection.');
+        resultBox.style.background = 'var(--badge-red-bg)';
+        resultBox.style.borderColor = 'var(--badge-red-text)';
+        resultBox.innerHTML = `
+          <div style="font-size: 0.9rem; color: var(--badge-red-text); font-weight: 500;">
+            ⚠️ <strong>Evaluation Error:</strong> ${err.message || 'Unable to grade answer right now due to high AI demand. Please try again shortly.'}
+          </div>
+        `;
+        resultBox.style.display = 'block';
         console.error(err);
       } finally {
         btn.disabled = false;
