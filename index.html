@@ -20,13 +20,15 @@
       --border-color: #e2e8f0;
       --badge-green-bg: #ecfdf5;
       --badge-green-text: #047857;
+      --badge-red-bg: #fef2f2;
+      --badge-red-text: #dc2626;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; background-color: var(--bg-page); color: var(--text-main); line-height: 1.6; }
     header { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
     .nav-container { max-width: 1120px; margin: 0 auto; padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: var::text-main; }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: var(--text-main); }
     .brand-logo { width: 40px; height: 40px; background-color: var(--primary); color: #ffffff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.15rem; }
     .brand-text h1 { font-size: 1.05rem; font-weight: 700; line-height: 1.2; color: var(--text-main); }
     .brand-text span { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; display: block; }
@@ -56,8 +58,16 @@
     .question-box:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .q-text { font-weight: 600; font-size: 0.98rem; margin-bottom: 0.75rem; color: var(--text-main); }
     .options-list { display: flex; flex-direction: column; gap: 0.5rem; }
-    .option-label { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.88rem; cursor: pointer; background: #fafafa; transition: all 0.2s; }
+    .option-label { display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.88rem; cursor: pointer; background: #fafafa; transition: all 0.2s; }
     .option-label:hover { background: var(--accent-bg); border-color: #cbd5e1; }
+    
+    /* Result Highlights */
+    .option-label.correct-choice { background-color: var(--badge-green-bg); border-color: var(--badge-green-text); color: var(--badge-green-text); font-weight: 600; }
+    .option-label.wrong-choice { background-color: var(--badge-red-bg); border-color: var(--badge-red-text); color: var(--badge-red-text); }
+    .badge-tag { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 6px; }
+    .badge-correct { background: var(--badge-green-text); color: #fff; }
+    .badge-wrong { background: var(--badge-red-text); color: #fff; }
+
     .explanation-box { margin-top: 0.75rem; padding: 0.75rem; background: #f8fafc; border-left: 3px solid var(--primary); font-size: 0.85rem; color: var(--text-muted); display: none; }
     .btn-submit-quiz { background: var(--badge-green-text); color: #ffffff; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 1rem; }
     .score-display { font-weight: 700; font-size: 1.1rem; color: var(--badge-green-text); margin-top: 1rem; }
@@ -86,16 +96,15 @@
       <div class="hero-pill">✨ Powered by n8n Webhook &amp; Gemini AI</div>
       <h2 class="hero-title">Turn Any Subject or Notes into <span>Custom Assessments</span></h2>
       <p class="hero-subtitle">
-        Enter any topic across computer science, business, science, or general knowledge. The AI engine instantly builds tailored multiple-choice questions and practical challenge scenarios.
+        Enter any topic across computer science, business, science, mathematics, or general knowledge.
       </p>
 
       <div class="presets-box">
         <span class="presets-label">Explore Multi-Domain Presets (Click to Autofill)</span>
         <div class="preset-chips">
+          <button class="preset-chip" onclick="loadPreset('Advanced Mathematics & Calculus Problems')">📐 Advanced Mathematics</button>
           <button class="preset-chip" onclick="loadPreset('Artificial Intelligence & Machine Learning Ethics')">🤖 AI &amp; Machine Learning</button>
-          <button class="preset-chip" onclick="loadPreset('Digital Marketing & Growth Funnels')">📈 Digital Marketing</button>
           <button class="preset-chip" onclick="loadPreset('Financial Operations & Risk Management')">💰 Financial Operations</button>
-          <button class="preset-chip" onclick="loadPreset('World History & Geopolitical Shifts')">🌍 World History</button>
         </div>
       </div>
 
@@ -208,24 +217,28 @@
           mcqHTML += `
             <div class="question-box" id="qBox-${idx}">
               <div class="q-text">Q${idx+1}. ${item.q}</div>
-              <div class="options-list">
+              <div class="options-list" id="optionsList-${idx}">
           `;
           item.options.forEach((opt, optIdx) => {
             mcqHTML += `
-              <label class="option-label">
-                <input type="radio" name="question_${idx}" value="${optIdx}" />
-                <span>${opt}</span>
+              <label class="option-label" id="optLabel-${idx}-${optIdx}">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <input type="radio" name="question_${idx}" value="${optIdx}" />
+                  <span>${opt}</span>
+                </div>
+                <span id="badge-${idx}-${optIdx}"></span>
               </label>
             `;
           });
           mcqHTML += `
               </div>
-              <div class="explanation-box" id="exp-${idx}">💡 <strong>Expert Feedback:</strong> ${item.exp}</div>
+              <div class="explanation-box" id="exp-${idx}">💡 <strong>Expert Feedback / Correct Reason:</strong> ${item.exp}</div>
             </div>
           `;
         });
       }
       mcqContainer.innerHTML = mcqHTML;
+      document.getElementById('scoreResult').innerHTML = '';
 
       if (data.scenario) {
         let rubricHTML = '';
@@ -237,7 +250,7 @@
 
         scenarioContainer.innerHTML = `
           <p style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">Challenge Task:</p>
-          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1lem;">${data.scenario.task}</p>
+          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">${data.scenario.task}</p>
           <p style="font-weight: 600; margin-bottom: 0.3rem; color: var(--text-main);">Evaluation Rubric Breakdown:</p>
           <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem;">
             ${rubricHTML}
@@ -254,16 +267,32 @@
 
       currentQuizData.questions.forEach((item, i) => {
         const selected = document.querySelector(`input[name="question_${i}"]:checked`);
+        const correctIdx = parseInt(item.correct);
         const expBox = document.getElementById(`exp-${i}`);
         if (expBox) expBox.style.display = 'block';
 
-        if (selected && parseInt(selected.value) === item.correct) {
-          score++;
+        // Highlight correct option in green with badge
+        const correctLabel = document.getElementById(`optLabel-${i}-${correctIdx}`);
+        const correctBadge = document.getElementById(`badge-${i}-${correctIdx}`);
+        if (correctLabel) correctLabel.classList.add('correct-choice');
+        if (correctBadge) correctBadge.innerHTML = `<span class="badge-tag badge-correct">✓ Correct Answer</span>`;
+
+        if (selected) {
+          const selectedVal = parseInt(selected.value);
+          if (selectedVal === correctIdx) {
+            score++;
+          } else {
+            // Highlight user's wrong choice in red with badge
+            const wrongLabel = document.getElementById(`optLabel-${i}-${selectedVal}`);
+            const wrongBadge = document.getElementById(`badge-${i}-${selectedVal}`);
+            if (wrongLabel) wrongLabel.classList.add('wrong-choice');
+            if (wrongBadge) wrongBadge.innerHTML = `<span class="badge-tag badge-wrong">✕ Wrong</span>`;
+          }
         }
       });
 
       const scoreResult = document.getElementById('scoreResult');
-      scoreResult.innerHTML = `<div class="score-display">🎉 Assessment Evaluated! Your Score: ${score} / ${total} Correct. Great analytical work!</div>`;
+      scoreResult.innerHTML = `<div class="score-display">🎉 Assessment Evaluated! Your Correct Score: ${score} / ${total}. Check the highlights above for verification!</div>`;
 
       if (score === total) {
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
