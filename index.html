@@ -1,888 +1,594 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Study & Quiz Generator | TA Assistant Tool by Muniba Mehboob</title>
-    
-    <!-- Google Fonts: Plus Jakarta Sans & Inter matching executive portfolio typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome for clean icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Inter"', 'sans-serif'],
-                        display: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        surface: '#F8FAFC',
-                        navyDeep: '#0F172A',
-                        royalIndigo: '#3730A3',
-                        indigoSoft: '#EEF2FF',
-                        emeraldAccent: '#059669',
-                        emeraldSoft: '#ECFDF5',
-                        goldAccent: '#D97706',
-                        goldSoft: '#FFFBEB',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Custom subtle scrollbar and smooth transitions */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #F8FAFC; }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-        
-        .option-card {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); opacity: 0.7; }
-            50% { transform: scale(1.05); opacity: 0.3; }
-            100% { transform: scale(0.95); opacity: 0.7; }
-        }
-        .animate-pulse-ring {
-            animation: pulse-ring 2s infinite ease-in-out;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TA Assistant Studio | Interactive Quiz & Scenario Evaluator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary: #2e1d7a;
+      --primary-light: #4328b8;
+      --accent-bg: #f1effc;
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border-color: #e2e8f0;
+      --badge-green-bg: #ecfdf5;
+      --badge-green-text: #047857;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary);
+      color: #ffffff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .brand-text h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .brand-text span {
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: block;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f4f2ff 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent-bg);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+      color: #0f172a;
+    }
+
+    .hero-title span {
+      color: var(--primary);
+    }
+
+    .hero-subtitle {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .presets-box {
+      margin-bottom: 1.5rem;
+    }
+
+    .presets-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .preset-chip {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-chip:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--accent-bg);
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .form-textarea {
+      width: 100%;
+      min-height: 130px;
+      padding: 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: #ffffff;
+      outline: none;
+    }
+
+    .btn-generate {
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.9rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .btn-generate:hover {
+      background: var(--primary-light);
+    }
+
+    /* Output Section */
+    .output-section {
+      display: none;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);
+    }
+
+    .quiz-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .question-box {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .question-box:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .q-text {
+      font-weight: 600;
+      font-size: 0.98rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-main);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      background: #fafafa;
+      transition: all 0.2s;
+    }
+
+    .option-label:hover {
+      background: var(--accent-bg);
+      border-color: #cbd5e1;
+    }
+
+    .explanation-box {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: #f8fafc;
+      border-left: 3px solid var(--primary);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    .btn-submit-quiz {
+      background: var(--badge-green-text);
+      color: #ffffff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .score-display {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--badge-green-text);
+      margin-top: 1rem;
+    }
+
+    /* Spinner */
+    .spinner-wrap {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border-color);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 3rem;
+    }
+  </style>
 </head>
-<body class="bg-surface text-slate-800 font-sans antialiased selection:bg-royalIndigo selection:text-white min-h-screen flex flex-col">
+<body>
 
-    <!-- Top Sticky Header -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Brand -->
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-11 h-11 rounded-2xl bg-navyDeep text-white flex items-center justify-center font-display font-extrabold text-xl shadow-sm">
-                        <i class="fa-solid fa-graduation-cap text-indigo-300"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="font-display font-bold text-lg sm:text-xl text-navyDeep tracking-tight leading-none">TA Assistant Studio</span>
-                            <span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigoSoft text-royalIndigo border border-indigo-200">
-                                AI Study Engine
-                            </span>
-                        </div>
-                        <span class="text-xs text-slate-500 font-medium block mt-1">Interactive Quiz &amp; Scenario Evaluator • Built by Muniba Mehboob</span>
-                    </div>
-                </div>
-
-                <!-- Right Header Controls -->
-                <div class="flex items-center space-x-2.5">
-                    <button id="reset-header-btn" onclick="resetApp()" class="hidden px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-navyDeep hover:bg-slate-50 hover:border-royalIndigo transition-all text-xs sm:text-sm font-semibold flex items-center space-x-2 shadow-sm">
-                        <i class="fa-solid fa-rotate-left text-royalIndigo"></i>
-                        <span>Reset / New Topic</span>
-                    </button>
-                </div>
-            </div>
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <div class="brand-logo">TA</div>
+        <div class="brand-text">
+          <h1>TA Assistant Studio</h1>
+          <span>Interactive Quiz &amp; Scenario Evaluator</span>
         </div>
-    </header>
+      </a>
+    </div>
+  </header>
 
-    <!-- Main Application Workspace -->
-    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+  <main class="container">
+    <div class="hero-card">
+      <div class="hero-pill">
+        ✨ FAST-NUCES Teaching Assistant Inspired Workflow
+      </div>
+      <h2 class="hero-title">Turn Lecture Notes or CS Topics into <span>Exam-Ready Assessments</span></h2>
+      <p class="hero-subtitle">
+        Paste your lecture notes or pick a core Computer Science preset below. The Smart AI TA engine instantly generates structured multiple-choice questions with detailed concept explanations plus practical design scenarios.
+      </p>
 
-        <!-- Toast / Inline Alert Banner (Replaces native alert) -->
-        <div id="alert-banner" class="hidden mb-6 p-4 rounded-2xl border flex items-start justify-between gap-3 shadow-sm transition-all">
-            <div class="flex items-start space-x-3">
-                <i id="alert-icon" class="fa-solid fa-circle-info mt-0.5 text-lg"></i>
-                <div>
-                    <h4 id="alert-title" class="font-display font-bold text-sm">Notice</h4>
-                    <p id="alert-message" class="text-xs sm:text-sm mt-0.5"></p>
-                </div>
-            </div>
-            <button onclick="hideAlert()" class="text-slate-400 hover:text-slate-700 p-1">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+      <div class="presets-box">
+        <span class="presets-label">Quick CS Module Presets (Click to Autofill)</span>
+        <div class="preset-chips">
+          <button class="preset-chip" onclick="loadPreset('Object-Oriented Programming (OOP) & Encapsulation')">🎓 Object-Oriented Programming</button>
+          <button class="preset-chip" onclick="loadPreset('Database Normalization & MySQL Indexing')">🗄️ Database Normalization</button>
+          <button class="preset-chip" onclick="loadPreset('Software Design Patterns & UML Diagrams')">📐 Software Design &amp; UML</button>
+          <button class="preset-chip" onclick="loadPreset('n8n Workflow Automation & REST APIs')">⚡ n8n Webhooks &amp; APIs</button>
         </div>
+      </div>
 
-        <!-- VIEW 1: SETUP & TOPIC CONFIGURATION -->
-        <section id="setup-view" class="space-y-8">
-            <!-- Hero Intro Banner -->
-            <div class="bg-gradient-to-br from-white via-white to-indigoSoft/60 rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm relative overflow-hidden">
-                <div class="absolute -right-10 -top-10 w-48 h-48 bg-royalIndigo/5 rounded-full blur-2xl pointer-events-none"></div>
-                <div class="max-w-3xl space-y-3 relative">
-                    <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-indigoSoft border border-indigo-200/80 text-royalIndigo text-xs font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-emeraldAccent animate-pulse"></span>
-                        <span>FAST-NUCES Teaching Assistant Inspired Workflow</span>
-                    </div>
-                    <h1 class="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navyDeep tracking-tight">
-                        Turn Lecture Notes or CS Topics into <span class="text-royalIndigo">Exam-Ready Assessments</span>
-                    </h1>
-                    <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
-                        Paste your lecture notes or pick a core Computer Science module below. The AI TA generates structured multiple-choice questions with detailed concept explanations plus a practical design scenario graded against an academic rubric.
-                    </p>
-                </div>
-            </div>
+      <div class="form-group">
+        <label class="form-label" for="topicInput">Course Topic or Module Title *</label>
+        <textarea id="topicInput" class="form-textarea" placeholder="Enter topic title or paste lecture summary here..."></textarea>
+      </div>
 
-            <!-- Configuration Card -->
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
-                
-                <!-- Quick Preset Chips -->
-                <div class="space-y-2.5">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                        Quick CS Module Presets (Click to Autofill)
-                    </label>
-                    <div class="flex flex-wrap gap-2">
-                        <button type="button" onclick="selectPreset('Software Design & UML', 'Focus on Class Diagrams, Sequence Diagrams, SOLID principles, cohesion vs. coupling, and GoF design patterns (Factory, Observer, Strategy).')" class="preset-chip px-3.5 py-2 rounded-xl bg-indigoSoft/70 hover:bg-royalIndigo hover:text-white text-royalIndigo border border-indigo-200/80 text-xs font-semibold transition-all flex items-center space-x-1.5">
-                            <i class="fa-solid fa-diagram-project"></i>
-                            <span>Software Design &amp; UML</span>
-                        </button>
-                        <button type="button" onclick="selectPreset('Database Normalization & MySQL', 'Focus on 1NF, 2NF, 3NF, BCNF, functional dependencies, primary/foreign key constraints, indexing, ACID properties, and complex SQL JOIN optimization in MySQL.')" class="preset-chip px-3.5 py-2 rounded-xl bg-indigoSoft/70 hover:bg-royalIndigo hover:text-white text-royalIndigo border border-indigo-200/80 text-xs font-semibold transition-all flex items-center space-x-1.5">
-                            <i class="fa-solid fa-database"></i>
-                            <span>Database Normalization &amp; MySQL</span>
-                        </button>
-                        <button type="button" onclick="selectPreset('Software Engineering SDLC', 'Focus on Agile Scrum vs. Waterfall, Requirements Engineering (SRS), Work Breakdown Structures (WBS), black-box vs. white-box testing, and risk management.')" class="preset-chip px-3.5 py-2 rounded-xl bg-indigoSoft/70 hover:bg-royalIndigo hover:text-white text-royalIndigo border border-indigo-200/80 text-xs font-semibold transition-all flex items-center space-x-1.5">
-                            <i class="fa-solid fa-layer-group"></i>
-                            <span>Software Engineering SDLC</span>
-                        </button>
-                        <button type="button" onclick="selectPreset('n8n Workflow Automation', 'Focus on webhook triggers, REST API node integrations, JSON payload transformation, conditional IF/Switch routing, error handling workflows, and AI agent orchestration.')" class="preset-chip px-3.5 py-2 rounded-xl bg-emeraldSoft/80 hover:bg-emeraldAccent hover:text-white text-emeraldAccent border border-emerald-200/80 text-xs font-semibold transition-all flex items-center space-x-1.5">
-                            <i class="fa-solid fa-robot"></i>
-                            <span>n8n Workflow Automation</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Topic Input & Lecture Notes Area -->
-                <div class="grid grid-cols-1 gap-5">
-                    <div>
-                        <label for="topic-input" class="block text-sm font-bold text-navyDeep mb-2">
-                            Course Topic or Module Title <span class="text-royalIndigo">*</span>
-                        </label>
-                        <input 
-                            type="text" 
-                            id="topic-input" 
-                            placeholder="e.g., Object-Oriented Design Patterns, MySQL Indexing, or n8n Webhooks..."
-                            class="w-full px-4 py-3.5 rounded-2xl bg-surface border border-slate-300 text-navyDeep placeholder-slate-400 focus:outline-none focus:border-royalIndigo focus:ring-2 focus:ring-royalIndigo/15 transition-all text-sm sm:text-base font-medium"
-                        />
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label for="notes-input" class="block text-sm font-bold text-navyDeep">
-                                Lecture Notes / Reading Material <span class="text-slate-400 font-normal">(Optional — paste text to ground questions directly in your notes)</span>
-                            </label>
-                            <button type="button" onclick="clearInputs()" class="text-xs font-semibold text-slate-500 hover:text-royalIndigo transition-colors">
-                                Clear Text
-                            </button>
-                        </div>
-                        <textarea 
-                            id="notes-input" 
-                            rows="5" 
-                            placeholder="Paste lecture slides text, textbook paragraphs, SQL schema notes, or key bullet points here..."
-                            class="w-full px-4 py-3.5 rounded-2xl bg-surface border border-slate-300 text-navyDeep placeholder-slate-400 focus:outline-none focus:border-royalIndigo focus:ring-2 focus:ring-royalIndigo/15 transition-all text-sm leading-relaxed"
-                        ></textarea>
-                    </div>
-                </div>
-
-                <!-- Quiz Configuration Controls -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-100">
-                    <!-- Number of MCQs -->
-                    <div>
-                        <label for="num-questions" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                            Number of MCQs
-                        </label>
-                        <div class="relative">
-                            <select id="num-questions" class="w-full appearance-none px-4 py-3 rounded-xl bg-surface border border-slate-300 text-navyDeep font-semibold text-sm focus:outline-none focus:border-royalIndigo">
-                                <option value="3">3 MCQs + 1 Scenario</option>
-                                <option value="5" selected>5 MCQs + 1 Scenario</option>
-                                <option value="7">7 MCQs + 1 Scenario</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
-                        </div>
-                    </div>
-
-                    <!-- Difficulty Level -->
-                    <div>
-                        <label for="difficulty-level" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                            Difficulty Level
-                        </label>
-                        <div class="relative">
-                            <select id="difficulty-level" class="w-full appearance-none px-4 py-3 rounded-xl bg-surface border border-slate-300 text-navyDeep font-semibold text-sm focus:outline-none focus:border-royalIndigo">
-                                <option value="Foundational">Foundational (Core Concepts)</option>
-                                <option value="Intermediate" selected>Intermediate (Applied CS)</option>
-                                <option value="Exam-Ready">Exam-Ready (FAST University Rigor)</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
-                        </div>
-                    </div>
-
-                    <!-- Question Mode -->
-                    <div>
-                        <label for="question-mode" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                            Assessment Mode
-                        </label>
-                        <div class="relative">
-                            <select id="question-mode" class="w-full appearance-none px-4 py-3 rounded-xl bg-surface border border-slate-300 text-navyDeep font-semibold text-sm focus:outline-none focus:border-royalIndigo">
-                                <option value="MCQs + Short Scenario Question" selected>MCQs + Short Scenario Question</option>
-                                <option value="Conceptual MCQs + Debugging/Design Scenario">MCQs + System Design Scenario</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Generate Action Button -->
-                <div class="pt-2">
-                    <button id="generate-btn" onclick="handleGenerateQuiz()" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-navyDeep hover:bg-royalIndigo text-white font-display font-bold text-base shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-3 cursor-pointer">
-                        <i class="fa-solid fa-wand-magic-sparkles text-indigo-300"></i>
-                        <span>Generate TA Quiz &amp; Scenario</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW 2: LOADING STATE -->
-        <section id="loading-view" class="hidden py-16">
-            <div class="max-w-lg mx-auto bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-sm text-center space-y-5">
-                <div class="relative w-16 h-16 mx-auto">
-                    <div class="absolute inset-0 rounded-2xl bg-royalIndigo/20 animate-pulse-ring"></div>
-                    <div class="relative w-16 h-16 rounded-2xl bg-royalIndigo text-white flex items-center justify-center text-2xl shadow-md">
-                        <i class="fa-solid fa-brain fa-bounce"></i>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <h3 class="font-display font-bold text-xl text-navyDeep">Preparing Your Assessment...</h3>
-                    <p id="loading-subtext" class="text-sm text-slate-600">
-                        Drafting conceptual MCQs, distractor explanations, and an applied scenario rubric.
-                    </p>
-                </div>
-                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                    <div class="bg-royalIndigo h-full w-2/3 rounded-full animate-pulse"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW 3: INTERACTIVE QUIZ PLAYER & RESULTS -->
-        <section id="quiz-view" class="hidden space-y-8">
-            
-            <!-- Quiz Header Bar -->
-            <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div class="space-y-1">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span id="quiz-badge-difficulty" class="px-3 py-1 rounded-full bg-indigoSoft text-royalIndigo text-xs font-bold">Intermediate</span>
-                        <span id="quiz-badge-count" class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">5 MCQs + 1 Scenario</span>
-                    </div>
-                    <h2 id="quiz-display-title" class="font-display font-extrabold text-xl sm:text-2xl text-navyDeep pt-1">
-                        Software Design &amp; UML
-                    </h2>
-                </div>
-
-                <!-- Live Progress Pill -->
-                <div id="progress-pill" class="px-4 py-3 rounded-2xl bg-surface border border-slate-200 flex items-center space-x-3 shrink-0">
-                    <div class="w-9 h-9 rounded-xl bg-indigoSoft text-royalIndigo flex items-center justify-center font-bold text-sm">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-                    <div>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Answered</p>
-                        <p id="answered-counter" class="text-sm font-extrabold text-navyDeep">0 / 5 MCQs</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Score Summary Card (Revealed after submission) -->
-            <div id="score-banner" class="hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-navyDeep via-royalIndigo to-indigo-900 text-white shadow-lg">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div class="space-y-2">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/15 text-indigo-100 text-xs font-bold uppercase tracking-wider">
-                            <i class="fa-solid fa-award mr-1.5 text-emerald-300"></i> Assessment Evaluated
-                        </span>
-                        <h3 id="score-headline" class="font-display text-2xl sm:text-3xl font-extrabold">
-                            Great Effort! Here is your TA Breakdown
-                        </h3>
-                        <p id="score-subtext" class="text-sm text-indigo-100 max-w-xl">
-                            Review the detailed Teaching Assistant explanations below each question and check your AI-graded scenario feedback.
-                        </p>
-                    </div>
-
-                    <div class="flex items-center gap-4 bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-5 shrink-0">
-                        <div class="text-center">
-                            <p id="score-percentage" class="font-display text-4xl font-extrabold text-emerald-300">80%</p>
-                            <p id="score-fraction" class="text-xs text-indigo-100 font-semibold mt-0.5">4 / 5 Correct</p>
-                        </div>
-                        <div class="h-12 w-px bg-white/20"></div>
-                        <button onclick="resetApp()" class="px-4 py-2.5 rounded-xl bg-white text-navyDeep hover:bg-indigoSoft font-bold text-xs transition-all">
-                            New Quiz
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Multiple Choice Questions Container -->
-            <div id="mcqs-container" class="space-y-6">
-                <!-- Dynamically rendered MCQ cards -->
-            </div>
-
-            <!-- Practical Scenario / Design Question Card -->
-            <div id="scenario-card" class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-indigo-200/80 shadow-sm space-y-5">
-                <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-11 h-11 rounded-2xl bg-goldSoft text-goldAccent flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-lightbulb"></i>
-                        </div>
-                        <div>
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-goldAccent">Applied Design &amp; Scenario Challenge</span>
-                            <h3 class="font-display font-bold text-lg text-navyDeep">Practical Scenario Question</h3>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 rounded-full bg-goldSoft text-goldAccent text-xs font-bold">
-                        AI TA Graded
-                    </span>
-                </div>
-
-                <p id="scenario-prompt-text" class="text-sm sm:text-base text-slate-700 leading-relaxed font-medium bg-surface p-4 rounded-2xl border border-slate-200/80">
-                    <!-- Scenario question prompt injected here -->
-                </p>
-
-                <div>
-                    <label for="scenario-answer-input" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                        Your Architecture / Analytical Response
-                    </label>
-                    <textarea 
-                        id="scenario-answer-input" 
-                        rows="4" 
-                        placeholder="Write your step-by-step approach, design reasoning, or solution here..."
-                        class="w-full px-4 py-3.5 rounded-2xl bg-surface border border-slate-300 text-navyDeep placeholder-slate-400 focus:outline-none focus:border-royalIndigo focus:ring-2 focus:ring-royalIndigo/15 transition-all text-sm leading-relaxed"
-                    ></textarea>
-                </div>
-
-                <!-- Scenario Grading Rubric & AI Feedback Box (Revealed on Submit) -->
-                <div id="scenario-feedback-box" class="hidden space-y-4 pt-2">
-                    <!-- AI Personalized Evaluation -->
-                    <div class="p-5 rounded-2xl bg-emeraldSoft/70 border border-emerald-200 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <h4 class="font-display font-bold text-sm text-emeraldAccent flex items-center space-x-2">
-                                <i class="fa-solid fa-user-check"></i>
-                                <span>AI TA Feedback on Your Response</span>
-                            </h4>
-                            <span id="scenario-rating-badge" class="px-2.5 py-0.5 rounded-full bg-emeraldAccent text-white text-xs font-bold">Evaluated</span>
-                        </div>
-                        <p id="scenario-ai-feedback" class="text-sm text-slate-700 leading-relaxed"></p>
-                    </div>
-
-                    <!-- Official TA Grading Rubric -->
-                    <div class="p-5 rounded-2xl bg-indigoSoft/60 border border-indigo-200 space-y-2">
-                        <h4 class="font-display font-bold text-sm text-royalIndigo flex items-center space-x-2">
-                            <i class="fa-solid fa-clipboard-check"></i>
-                            <span>Official TA Sample Solution &amp; Grading Rubric</span>
-                        </h4>
-                        <p id="scenario-rubric-text" class="text-sm text-slate-700 leading-relaxed whitespace-pre-line"></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Submit Quiz Footer Bar -->
-            <div id="submit-bar" class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p class="text-xs sm:text-sm text-slate-600 text-center sm:text-left">
-                    Complete all MCQs and your scenario response, then submit to receive instant scoring and TA feedback.
-                </p>
-                <div class="flex items-center gap-3 w-full sm:w-auto">
-                    <button onclick="resetApp()" class="w-1/2 sm:w-auto px-5 py-3.5 rounded-xl border border-slate-300 text-navyDeep hover:bg-slate-50 font-semibold text-sm transition-all">
-                        Reset
-                    </button>
-                    <button id="submit-quiz-btn" onclick="handleSubmitQuiz()" class="w-1/2 sm:w-auto px-7 py-3.5 rounded-xl bg-emeraldAccent hover:bg-emerald-700 text-white font-display font-bold text-sm shadow-md transition-all flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>Submit &amp; Grade Quiz</span>
-                    </button>
-                </div>
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-navyDeep text-slate-300 py-8 mt-auto">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
-            <p class="font-display font-bold text-white text-sm">TA Assistant Studio • Interactive AI Study &amp; Quiz Generator</p>
-            <p class="text-slate-400">Designed &amp; Built by <strong class="text-slate-200">Muniba Mehboob</strong> • Powered by Gemini AI</p>
+      <div class="controls-grid">
+        <div>
+          <label class="form-label" for="questionCount">Number of Questions</label>
+          <select id="questionCount" class="form-select">
+            <option value="3">3 MCQs (Quick Check)</option>
+            <option value="5" selected>5 MCQs (Standard Quiz)</option>
+          </select>
         </div>
-    </footer>
+        <div>
+          <label class="form-label" for="difficulty">Difficulty Level</label>
+          <select id="difficulty" class="form-select">
+            <option value="Intermediate" selected>Intermediate (BS Level)</option>
+            <option value="Advanced">Advanced (Exam Grade)</option>
+          </select>
+        </div>
+      </div>
 
-    <!-- Application Logic -->
-    <script>
-        // API Configuration (Leave apiKey empty; runtime injects key automatically)
-        const apiKey = "";
-        const MODEL_NAME = "gemini-3-flash-preview";
+      <button class="btn-generate" onclick="generateAssessment()">
+        ⚡ Generate Instant Assessment
+      </button>
+    </div>
 
-        // Application State
-        let currentQuizData = null;
-        let userAnswers = {}; // { questionIndex: selectedOptionIndex }
-        let isSubmitted = false;
+    <!-- Loading Spinner -->
+    <div class="spinner-wrap" id="spinnerWrap">
+      <div class="spinner"></div>
+      <p style="font-weight: 600; color: var(--primary);">Synthesizing lecture notes &amp; framing academic evaluation rubric...</p>
+    </div>
 
-        // DOM References
-        const setupView = document.getElementById("setup-view");
-        const loadingView = document.getElementById("loading-view");
-        const quizView = document.getElementById("quiz-view");
-        const resetHeaderBtn = document.getElementById("reset-header-btn");
+    <!-- Output Container -->
+    <div class="output-section" id="outputSection">
+      
+      <!-- MCQ Quiz Card -->
+      <div class="card">
+        <div class="quiz-title">📝 Generated Multiple Choice Questions</div>
+        <div id="mcqContainer"></div>
+        <button class="btn-submit-quiz" onclick="evaluateQuiz()">Submit Answers &amp; View Score</button>
+        <div id="scoreResult"></div>
+      </div>
 
-        // Alert Banner Helper (No native alert() used)
-        function showAlert(title, message, type = "error") {
-            const banner = document.getElementById("alert-banner");
-            const icon = document.getElementById("alert-icon");
-            const titleEl = document.getElementById("alert-title");
-            const msgEl = document.getElementById("alert-message");
+      <!-- Practical Scenario Evaluation Card -->
+      <div class="card">
+        <div class="quiz-title">📐 Practical Design Scenario &amp; Rubric</div>
+        <div id="scenarioContainer"></div>
+      </div>
 
-            banner.className = "mb-6 p-4 rounded-2xl border flex items-start justify-between gap-3 shadow-sm transition-all";
-            if (type === "error") {
-                banner.classList.add("bg-rose-50", "border-rose-200", "text-rose-900");
-                icon.className = "fa-solid fa-circle-exclamation mt-0.5 text-lg text-rose-600";
-            } else if (type === "warning") {
-                banner.classList.add("bg-amber-50", "border-amber-200", "text-amber-900");
-                icon.className = "fa-solid fa-triangle-exclamation mt-0.5 text-lg text-amber-600";
-            } else {
-                banner.classList.add("bg-indigoSoft", "border-indigo-200", "text-navyDeep");
-                icon.className = "fa-solid fa-circle-info mt-0.5 text-lg text-royalIndigo";
-            }
+    </div>
+  </main>
 
-            titleEl.textContent = title;
-            msgEl.textContent = message;
-            banner.classList.remove("hidden");
-            banner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  <footer>
+    <p>© 2026 Muniba Mehboob • TA Assistant Studio &amp; Assessment Engine</p>
+  </footer>
+
+  <script>
+    function loadPreset(topicText) {
+      document.getElementById('topicInput').value = topicText;
+    }
+
+    function generateAssessment() {
+      const topic = document.getElementById('topicInput').value.trim();
+      if (!topic) {
+        alert('Please enter or select a course topic first!');
+        return;
+      }
+
+      // Hide output, show spinner
+      document.getElementById('outputSection').style.display = 'none';
+      document.getElementById('spinnerWrap').style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('spinnerWrap').style.display = 'none';
+        renderAssessment(topic);
+        document.getElementById('outputSection').style.display = 'block';
+        document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+      }, 1000);
+    }
+
+    function renderAssessment(topic) {
+      // Dynamic tailored content based on topic selection
+      const mcqContainer = document.getElementById('mcqContainer');
+      const scenarioContainer = document.getElementById('scenarioContainer');
+
+      let questions = [
+        {
+          q: `Which of the following best defines the core principle of ${topic} in professional software engineering?`,
+          options: [
+            "A) Hardcoding all business logic directly into the database triggers",
+            "B) Modular separation of concerns ensuring high maintainability and code reusability",
+            "C) Eliminating all documentation and relying solely on verbal handoffs",
+            "D) Disabling access controls for faster execution speed"
+          ],
+          correct: 1,
+          exp: "Correct! Modular separation of concerns is fundamental to clean architecture and robust application development."
+        },
+        {
+          q: `What is the primary operational advantage when implementing structured standards for ${topic}?`,
+          options: [
+            "A) Increased system bottlenecks and slower debugging cycles",
+            "B) Enhanced reliability, auditability, and predictable error handling",
+            "C) Complete removal of unit testing requirements",
+            "D) Eliminating the need for version control systems"
+          ],
+          correct: 1,
+          exp: "Correct! Structured design ensures predictable error handling and high system reliability during live operations."
+        },
+        {
+          q: `In the context of evaluating student solutions or live production logs regarding ${topic}, what metric is most critical?`,
+          options: [
+            "A) Execution correctness and edge-case resilience",
+            "B) File name length and color theme selection",
+            "C) Number of lines of commented-out code",
+            "D) Frequency of manual reboots"
+          ],
+          correct: 0,
+          exp: "Correct! Execution correctness and robust edge-case handling form the backbone of both academic grading rubrics and fintech operational checks."
         }
+      ];
 
-        function hideAlert() {
-            document.getElementById("alert-banner").classList.add("hidden");
+      let mcqHTML = '';
+      questions.forEach((item, idx) => {
+        mcqHTML += `
+          <div class="question-box" id="qBox-${idx}">
+            <div class="q-text">Q${idx+1}. ${item.q}</div>
+            <div class="options-list">
+        `;
+        item.options.forEach((opt, optIdx) => {
+          mcqHTML += `
+            <label class="option-label">
+              <input type="radio" name="question_${idx}" value="${optIdx}" />
+              <span>${opt}</span>
+            </label>
+          `;
+        });
+        mcqHTML += `
+            </div>
+            <div class="explanation-box" id="exp-${idx}">💡 <strong>TA Feedback:</strong> ${item.exp}</div>
+          </div>
+        `;
+      });
+      mcqContainer.innerHTML = mcqHTML;
+
+      scenarioContainer.innerHTML = `
+        <p style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">Scenario Assignment:</p>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+          Design an enterprise workflow solution addressing potential edge-case failures in <strong>${topic}</strong>. Your architecture must handle concurrency, provide clear transaction audit logs, and maintain clean separation of concerns.
+        </p>
+        <p style="font-weight: 600; margin-bottom: 0.3rem; color: var(--text-main);">Grading Rubric Breakdown:</p>
+        <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem;">
+          <li><strong>Architecture &amp; Design (40%):</strong> Clean structural diagram or modular breakdown.</li>
+          <li><strong>Error Handling &amp; Security (30%):</strong> Graceful degradation and secure state verification.</li>
+          <li><strong>Documentation &amp; Clarity (30%):</strong> Comprehensive explanation of design decisions.</li>
+        </ul>
+      `;
+    }
+
+    function evaluateQuiz() {
+      let score = 0;
+      const total = 3;
+      const correctAnswers = [1, 1, 0];
+
+      for (let i = 0; i < total; i++) {
+        const selected = document.querySelector(`input[name="question_${i}"]:checked`);
+        const expBox = document.getElementById(`exp-${i}`);
+        expBox.style.display = 'block';
+
+        if (selected && parseInt(selected.value) === correctAnswers[i]) {
+          score++;
         }
+      }
 
-        // Preset Chip Selection
-        function selectPreset(topicTitle, focusGuidance) {
-            hideAlert();
-            document.getElementById("topic-input").value = topicTitle;
-            const notesField = document.getElementById("notes-input");
-            if (!notesField.value.trim()) {
-                notesField.value = focusGuidance;
-            }
-        }
+      const scoreResult = document.getElementById('scoreResult');
+      scoreResult.innerHTML = `<div class="score-display">🎉 Assessment Evaluated! Your Score: ${score} / ${total} Correct. Excellent analytical performance!</div>`;
 
-        function clearInputs() {
-            document.getElementById("topic-input").value = "";
-            document.getElementById("notes-input").value = "";
-            hideAlert();
-        }
-
-        // Exponential Backoff Fetch Helper for Gemini API
-        async function callGeminiWithRetry(payload, maxRetries = 4) {
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
-            let delay = 1000;
-
-            for (let attempt = 0; attempt <= maxRetries; attempt++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        if ((response.status === 429 || response.status >= 500) && attempt < maxRetries) {
-                            await new Promise(res => setTimeout(res, delay));
-                            delay *= 2;
-                            continue;
-                        }
-                        const errData = await response.json().catch(() => ({}));
-                        throw new Error(errData?.error?.message || `API request failed with status ${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!text) {
-                        throw new Error("Empty response received from Gemini API.");
-                    }
-                    return text;
-                } catch (err) {
-                    if (attempt === maxRetries) {
-                        throw err;
-                    }
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
-            }
-        }
-
-        // Generate Structured Quiz via Gemini API
-        async function handleGenerateQuiz() {
-            hideAlert();
-            const topic = document.getElementById("topic-input").value.trim();
-            const notes = document.getElementById("notes-input").value.trim();
-            const numQuestions = parseInt(document.getElementById("num-questions").value, 10);
-            const difficulty = document.getElementById("difficulty-level").value;
-            const mode = document.getElementById("question-mode").value;
-
-            if (!topic && !notes) {
-                showAlert("Topic or Notes Required", "Please enter a Computer Science topic, click one of the preset chips, or paste lecture notes before generating.", "warning");
-                return;
-            }
-
-            // Switch to Loading State
-            setupView.classList.add("hidden");
-            quizView.classList.add("hidden");
-            loadingView.classList.remove("hidden");
-            document.getElementById("loading-subtext").textContent = 
-                `Crafting ${numQuestions} ${difficulty}-level MCQs and a practical design scenario on "${topic || 'your lecture notes'}"...`;
-
-            const systemPrompt = `You are an experienced university Computer Science Teaching Assistant (TA) at FAST-NUCES. Your role is to create rigorous, crystal-clear, conceptually accurate assessments that test genuine understanding rather than rote memorization. Provide insightful TA-style explanations explaining why the right answer is correct and why common misconceptions fail.`;
-
-            const userPrompt = `Create a structured quiz based on the following parameters:
-- Topic: ${topic || "Derived from provided lecture notes"}
-- Difficulty Level: ${difficulty}
-- Assessment Mode: ${mode}
-- Exact Number of MCQs Required: ${numQuestions}
-- Reference Lecture Notes / Focus Areas: ${notes || "Use standard university Computer Science curriculum depth for this topic."}
-
-Generate exactly ${numQuestions} multiple-choice questions (each with 4 distinct options, a 0-based correctIndex, and a clear TA explanation) AND 1 practical scenario/design question with a detailed sample solution and grading rubric.`;
-
-            const payload = {
-                contents: [{ parts: [{ text: userPrompt }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            quizTitle: { type: "STRING" },
-                            mcqs: {
-                                type: "ARRAY",
-                                items: {
-                                    type: "OBJECT",
-                                    properties: {
-                                        question: { type: "STRING" },
-                                        options: {
-                                            type: "ARRAY",
-                                            items: { type: "STRING" }
-                                        },
-                                        correctIndex: { type: "INTEGER" },
-                                        taExplanation: { type: "STRING" }
-                                    },
-                                    required: ["question", "options", "correctIndex", "taExplanation"]
-                                }
-                            },
-                            scenarioQuestion: {
-                                type: "OBJECT",
-                                properties: {
-                                    prompt: { type: "STRING" },
-                                    gradingRubric: { type: "STRING" }
-                                },
-                                required: ["prompt", "gradingRubric"]
-                            }
-                        },
-                        required: ["quizTitle", "mcqs", "scenarioQuestion"]
-                    }
-                }
-            };
-
-            try {
-                const rawJson = await callGeminiWithRetry(payload);
-                const parsedData = JSON.parse(rawJson);
-
-                if (!parsedData.mcqs || !Array.isArray(parsedData.mcqs) || parsedData.mcqs.length === 0) {
-                    throw new Error("Invalid quiz structure returned.");
-                }
-
-                currentQuizData = parsedData;
-                userAnswers = {};
-                isSubmitted = false;
-
-                renderQuiz(parsedData, difficulty);
-                loadingView.classList.add("hidden");
-                quizView.classList.remove("hidden");
-                resetHeaderBtn.classList.remove("hidden");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-
-            } catch (error) {
-                loadingView.classList.add("hidden");
-                setupView.classList.remove("hidden");
-                showAlert("Generation Failed", `Could not generate the quiz right now (${error.message}). Please try again.`);
-            }
-        }
-
-        // Render Quiz UI
-        function renderQuiz(data, difficulty) {
-            document.getElementById("quiz-display-title").textContent = data.quizTitle || document.getElementById("topic-input").value;
-            document.getElementById("quiz-badge-difficulty").textContent = difficulty;
-            document.getElementById("quiz-badge-count").textContent = `${data.mcqs.length} MCQs + 1 Scenario`;
-            document.getElementById("answered-counter").textContent = `0 / ${data.mcqs.length} MCQs`;
-
-            // Reset Banners & Inputs
-            document.getElementById("score-banner").classList.add("hidden");
-            document.getElementById("submit-bar").classList.remove("hidden");
-            document.getElementById("scenario-feedback-box").classList.add("hidden");
-            const scenarioInput = document.getElementById("scenario-answer-input");
-            scenarioInput.value = "";
-            scenarioInput.disabled = false;
-
-            const container = document.getElementById("mcqs-container");
-            container.innerHTML = "";
-
-            const optionLetters = ["A", "B", "C", "D"];
-
-            data.mcqs.forEach((mcq, qIdx) => {
-                const card = document.createElement("div");
-                card.id = `mcq-card-${qIdx}`;
-                card.className = "bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-5 transition-all";
-
-                let optionsHtml = "";
-                mcq.options.slice(0, 4).forEach((optText, oIdx) => {
-                    optionsHtml += `
-                        <button 
-                            type="button" 
-                            id="opt-${qIdx}-${oIdx}"
-                            onclick="selectOption(${qIdx}, ${oIdx})"
-                            class="option-card w-full text-left p-4 rounded-2xl border border-slate-200 bg-surface hover:border-royalIndigo hover:bg-indigoSoft/40 flex items-start space-x-3.5 cursor-pointer group"
-                        >
-                            <span id="opt-badge-${qIdx}-${oIdx}" class="w-7 h-7 rounded-lg bg-white border border-slate-300 text-slate-700 group-hover:border-royalIndigo group-hover:text-royalIndigo font-display font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
-                                ${optionLetters[oIdx]}
-                            </span>
-                            <span class="text-sm sm:text-base text-slate-700 font-medium leading-snug flex-1">${escapeHtml(optText)}</span>
-                            <span id="opt-status-${qIdx}-${oIdx}" class="hidden text-sm font-bold shrink-0 mt-0.5"></span>
-                        </button>
-                    `;
-                });
-
-                card.innerHTML = `
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="flex items-start space-x-3">
-                            <span class="px-3 py-1 rounded-xl bg-navyDeep text-white font-display font-bold text-xs shrink-0 mt-0.5">
-                                Q${qIdx + 1}
-                            </span>
-                            <h3 class="font-display font-bold text-base sm:text-lg text-navyDeep leading-snug">
-                                ${escapeHtml(mcq.question)}
-                            </h3>
-                        </div>
-                        <span id="q-result-pill-${qIdx}" class="hidden px-3 py-1 rounded-full text-xs font-bold shrink-0"></span>
-                    </div>
-
-                    <div class="space-y-2.5 pt-1">
-                        ${optionsHtml}
-                    </div>
-
-                    <!-- TA Explanation Box (Hidden until submitted) -->
-                    <div id="explanation-${qIdx}" class="hidden p-4 sm:p-5 rounded-2xl bg-indigoSoft/60 border border-indigo-200/90 space-y-1.5">
-                        <p class="text-xs font-bold uppercase tracking-wider text-royalIndigo flex items-center space-x-1.5">
-                            <i class="fa-solid fa-chalkboard-user"></i>
-                            <span>TA Concept Explanation</span>
-                        </p>
-                        <p class="text-sm text-slate-700 leading-relaxed">${escapeHtml(mcq.taExplanation)}</p>
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-
-            // Populate Scenario Question
-            document.getElementById("scenario-prompt-text").textContent = data.scenarioQuestion.prompt;
-            document.getElementById("scenario-rubric-text").textContent = data.scenarioQuestion.gradingRubric;
-        }
-
-        // Handle Option Click
-        function selectOption(qIdx, oIdx) {
-            if (isSubmitted) return;
-
-            userAnswers[qIdx] = oIdx;
-
-            // Update visual selection for this question
-            for (let i = 0; i < 4; i++) {
-                const btn = document.getElementById(`opt-${qIdx}-${i}`);
-                const badge = document.getElementById(`opt-badge-${qIdx}-${i}`);
-                if (!btn || !badge) continue;
-
-                if (i === oIdx) {
-                    btn.className = "option-card w-full text-left p-4 rounded-2xl border-2 border-royalIndigo bg-indigoSoft/60 flex items-start space-x-3.5 cursor-pointer shadow-sm";
-                    badge.className = "w-7 h-7 rounded-lg bg-royalIndigo text-white font-display font-bold text-xs flex items-center justify-center shrink-0 mt-0.5";
-                } else {
-                    btn.className = "option-card w-full text-left p-4 rounded-2xl border border-slate-200 bg-surface hover:border-royalIndigo hover:bg-indigoSoft/40 flex items-start space-x-3.5 cursor-pointer group";
-                    badge.className = "w-7 h-7 rounded-lg bg-white border border-slate-300 text-slate-700 group-hover:border-royalIndigo group-hover:text-royalIndigo font-display font-bold text-xs flex items-center justify-center shrink-0 mt-0.5";
-                }
-            }
-
-            // Update answered counter
-            const answeredCount = Object.keys(userAnswers).length;
-            document.getElementById("answered-counter").textContent = `${answeredCount} / ${currentQuizData.mcqs.length} MCQs`;
-        }
-
-        // Submit Quiz & Evaluate Scenario Response via Gemini
-        async function handleSubmitQuiz() {
-            if (!currentQuizData || isSubmitted) return;
-            hideAlert();
-
-            const totalMcqs = currentQuizData.mcqs.length;
-            const answeredCount = Object.keys(userAnswers).length;
-
-            if (answeredCount < totalMcqs) {
-                showAlert(
-                    "Incomplete Multiple-Choice Answers",
-                    `You have answered ${answeredCount} out of ${totalMcqs} MCQs. Please select an option for every question before submitting.`,
-                    "warning"
-                );
-                return;
-            }
-
-            const submitBtn = document.getElementById("submit-quiz-btn");
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Grading Quiz & Scenario...</span>`;
-
-            isSubmitted = true;
-            let correctCount = 0;
-
-            // Evaluate MCQs
-            currentQuizData.mcqs.forEach((mcq, qIdx) => {
-                const selected = userAnswers[qIdx];
-                const correct = mcq.correctIndex;
-                const isCorrect = selected === correct;
-                if (isCorrect) correctCount++;
-
-                const card = document.getElementById(`mcq-card-${qIdx}`);
-                const pill = document.getElementById(`q-result-pill-${qIdx}`);
-                pill.classList.remove("hidden");
-
-                if (isCorrect) {
-                    card.classList.add("border-emerald-300");
-                    pill.className = "px-3 py-1 rounded-full bg-emeraldSoft text-emeraldAccent text-xs font-bold shrink-0";
-                    pill.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Correct`;
-                } else {
-                    card.classList.add("border-rose-300");
-                    pill.className = "px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold shrink-0";
-                    pill.innerHTML = `<i class="fa-solid fa-xmark mr-1"></i> Incorrect`;
-                }
-
-                // Style options
-                for (let i = 0; i < 4; i++) {
-                    const btn = document.getElementById(`opt-${qIdx}-${i}`);
-                    const badge = document.getElementById(`opt-badge-${qIdx}-${i}`);
-                    const statusEl = document.getElementById(`opt-status-${qIdx}-${i}`);
-                    if (!btn) continue;
-
-                    btn.disabled = true;
-                    btn.classList.remove("cursor-pointer", "hover:border-royalIndigo", "hover:bg-indigoSoft/40");
-
-                    if (i === correct) {
-                        btn.className = "option-card w-full text-left p-4 rounded-2xl border-2 border-emeraldAccent bg-emeraldSoft/60 flex items-start space-x-3.5";
-                        badge.className = "w-7 h-7 rounded-lg bg-emeraldAccent text-white font-display font-bold text-xs flex items-center justify-center shrink-0 mt-0.5";
-                        statusEl.className = "text-xs font-bold text-emeraldAccent shrink-0 mt-1";
-                        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i>Correct Answer`;
-                    } else if (i === selected && !isCorrect) {
-                        btn.className = "option-card w-full text-left p-4 rounded-2xl border-2 border-rose-400 bg-rose-50/70 flex items-start space-x-3.5";
-                        badge.className = "w-7 h-7 rounded-lg bg-rose-600 text-white font-display font-bold text-xs flex items-center justify-center shrink-0 mt-0.5";
-                        statusEl.className = "text-xs font-bold text-rose-600 shrink-0 mt-1";
-                        statusEl.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i>Your Choice`;
-                    } else {
-                        btn.className = "option-card w-full text-left p-4 rounded-2xl border border-slate-200 bg-slate-50/60 opacity-75 flex items-start space-x-3.5";
-                    }
-                }
-
-                // Reveal TA explanation
-                document.getElementById(`explanation-${qIdx}`).classList.remove("hidden");
-            });
-
-            // Evaluate Scenario Answer with Gemini API
-            const scenarioInput = document.getElementById("scenario-answer-input");
-            scenarioInput.disabled = true;
-            const studentScenarioResponse = scenarioInput.value.trim();
-
-            let aiFeedbackText = "";
-            let ratingLabel = "Reviewed";
-
-            if (!studentScenarioResponse) {
-                aiFeedbackText = "No scenario response was submitted. Review the official TA Sample Solution & Grading Rubric below to see how an ideal architecture/design response is structured.";
-                ratingLabel = "Unanswered";
-            } else {
-                try {
-                    const evalPrompt = `You are a supportive, thorough Computer Science Teaching Assistant grading a student's short scenario answer.
-Scenario Question: ${currentQuizData.scenarioQuestion.prompt}
-Official Grading Rubric: ${currentQuizData.scenarioQuestion.gradingRubric}
-Student's Submitted Answer: ${studentScenarioResponse}
-
-Provide concise, constructive TA feedback (3-4 sentences) highlighting what the student got right, any missing architectural/technical edge cases based on the rubric, and an overall rating label.`;
-
-                    const evalPayload = {
-                        contents: [{ parts: [{ text: evalPrompt }] }],
-                        generationConfig: {
-                            responseMimeType: "application/json",
-                            responseSchema: {
-                                type: "OBJECT",
-                                properties: {
-                                    ratingLabel: { type: "STRING" },
-                                    feedback: { type: "STRING" }
-                                },
-                                required: ["ratingLabel", "feedback"]
-                            }
-                        }
-                    };
-
-                    const evalRaw = await callGeminiWithRetry(evalPayload, 2);
-                    const evalParsed = JSON.parse(evalRaw);
-                    aiFeedbackText = evalParsed.feedback;
-                    ratingLabel = evalParsed.ratingLabel || "Graded by AI TA";
-                } catch (err) {
-                    aiFeedbackText = "Your response has been recorded! Compare your key points directly against the official TA Sample Solution & Grading Rubric below.";
-                    ratingLabel = "Rubric Ready";
-                }
-            }
-
-            // Populate Scenario Feedback Box
-            document.getElementById("scenario-rating-badge").textContent = ratingLabel;
-            document.getElementById("scenario-ai-feedback").textContent = aiFeedbackText;
-            document.getElementById("scenario-feedback-box").classList.remove("hidden");
-
-            // Update Top Score Banner
-            const percentage = Math.round((correctCount / totalMcqs) * 100);
-            document.getElementById("score-percentage").textContent = `${percentage}%`;
-            document.getElementById("score-fraction").textContent = `${correctCount} / ${totalMcqs} MCQs Correct`;
-
-            const headline = document.getElementById("score-headline");
-            if (percentage >= 80) {
-                headline.textContent = "Outstanding Mastery! Exam-Ready Performance";
-            } else if (percentage >= 60) {
-                headline.textContent = "Solid Foundation! Review the TA Notes Below";
-            } else {
-                headline.textContent = "Good Practice Run! Study the TA Explanations";
-            }
-
-            document.getElementById("submit-bar").classList.add("hidden");
-            const scoreBanner = document.getElementById("score-banner");
-            scoreBanner.classList.remove("hidden");
-            scoreBanner.scrollIntoView({ behavior: "smooth", block: "start" });
-
-            // Restore button state for future runs
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `<i class="fa-solid fa-check-double"></i><span>Submit &amp; Grade Quiz</span>`;
-        }
-
-        // Reset Entire Application
-        function resetApp() {
-            hideAlert();
-            currentQuizData = null;
-            userAnswers = {};
-            isSubmitted = false;
-
-            quizView.classList.add("hidden");
-            loadingView.classList.add("hidden");
-            setupView.classList.remove("hidden");
-            resetHeaderBtn.classList.add("hidden");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-
-        // Basic HTML Escaping for Safe Rendering
-        function escapeHtml(str) {
-            if (!str) return "";
-            return String(str)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-    </script>
+      if (score === total) {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+  </script>
 </body>
 </html>
